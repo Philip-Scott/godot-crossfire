@@ -1,0 +1,98 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://Elements/Player/Player.gd" type="Script" id=1]
+[ext_resource path="res://Elements/Player/Player.svg" type="Texture" id=2]
+[ext_resource path="res://Elements/Player/light.png" type="Texture" id=3]
+[ext_resource path="res://Elements/Shield/Shield.tscn" type="PackedScene" id=4]
+
+[sub_resource type="Curve" id=1]
+min_value = -360.0
+max_value = 360.0
+_data = [ Vector2( 0, -140.184 ), 0.0, 0.0, 0, 0, Vector2( 1, 163.944 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=2]
+curve = SubResource( 1 )
+
+[sub_resource type="Curve" id=3]
+_data = [ Vector2( 0, 0.2382 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.1502 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=4]
+curve = SubResource( 3 )
+
+[sub_resource type="Curve" id=5]
+_data = [ Vector2( 0.067034, 0.5176 ), 0.0, 0.0, 0, 0, Vector2( 0.920416, 0 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=6]
+curve = SubResource( 5 )
+
+[sub_resource type="ParticlesMaterial" id=7]
+trail_size_modifier = SubResource( 6 )
+emission_shape = 2
+emission_box_extents = Vector3( 10, 20, 1 )
+flag_disable_z = true
+gravity = Vector3( 0, 0, 0 )
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+angle_random = 1.0
+angle_curve = SubResource( 2 )
+scale_curve = SubResource( 4 )
+
+[node name="Player" type="KinematicBody2D"]
+position = Vector2( 0.277359, -0.668243 )
+collision_layer = 2
+collision_mask = 13
+script = ExtResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="."]
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 2 )
+
+[node name="Light2D" type="Light2D" parent="Sprite"]
+show_behind_parent = true
+scale = Vector2( 0.556156, 0.595023 )
+texture = ExtResource( 3 )
+texture_scale = 0.8
+shadow_enabled = true
+shadow_filter = 1
+shadow_filter_smooth = 4.0
+
+[node name="RechargeTimer" type="Timer" parent="."]
+wait_time = 1.9
+one_shot = true
+
+[node name="Shield" parent="." instance=ExtResource( 4 )]
+position = Vector2( 94.6551, 0 )
+rotation = 1.5708
+scale = Vector2( 3, 2 )
+
+[node name="Shield2" parent="." instance=ExtResource( 4 )]
+position = Vector2( 61.0771, 75.0997 )
+rotation = 2.35619
+scale = Vector2( 3, 2 )
+
+[node name="Shield3" parent="." instance=ExtResource( 4 )]
+position = Vector2( 60.9699, -74.693 )
+rotation = 0.785398
+scale = Vector2( 3, 2 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PoolVector2Array( -55.4306, -28.4699, 16.4363, -46.2913, 60.0214, -0.575402, 15.9053, 44.7731, -55.6126, 27.4044 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+current = true
+zoom = Vector2( 1.2, 1.2 )
+smoothing_enabled = true
+
+[node name="Trail" type="Particles2D" parent="."]
+modulate = Color( 1, 1, 1, 0.0235294 )
+show_behind_parent = true
+position = Vector2( -44.6936, -1.39667 )
+scale = Vector2( 0.5, 0.5 )
+emitting = false
+amount = 200
+randomness = 1.0
+fixed_fps = 30
+local_coords = false
+process_material = SubResource( 7 )
+texture = ExtResource( 2 )
+
