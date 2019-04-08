@@ -2,11 +2,11 @@ extends KinematicBody2D
 
 signal power_changed(power_level)
 
-export (float) var speed = 400
+export (float) var speed = 350
 export (float) var dash_multiplyer = 2.2
 
 export (float) var max_power = 100
-export (float) var recharge_speed = 5
+export (float) var recharge_speed = 6
 
 var power = max_power
 var velocity = Vector2()
@@ -23,9 +23,11 @@ func _ready():
 	$Shield2.connect("shield_hit", self, "_on_shield_hit");
 	$Shield3.connect("shield_hit", self, "_on_shield_hit");
 
-func _process(delta):
+func _physics_process(delta):
 	get_input(delta)
 	recharge(delta)
+
+func _process(delta):
 	propagate_power()
 
 func get_input(delta):

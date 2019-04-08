@@ -21,6 +21,7 @@ gradient = SubResource( 3 )
 [sub_resource type="ParticlesMaterial" id=5]
 trail_divisor = 5
 flag_disable_z = true
+spread = 0.0
 gravity = Vector3( 0, 0, 0 )
 angular_velocity = 1.0
 orbit_velocity = 0.0
@@ -48,15 +49,17 @@ texture = ExtResource( 3 )
 color = Color( 0.921569, 0.592157, 0.592157, 1 )
 energy = 1.5
 shadow_enabled = true
+shadow_item_cull_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 2 )
 
 [node name="Particles" type="Particles2D" parent="."]
 show_behind_parent = true
+light_mask = 0
 emitting = false
-amount = 10
-lifetime = 0.5
+amount = 15
+lifetime = 0.4
 local_coords = false
 process_material = SubResource( 5 )
 texture = ExtResource( 2 )

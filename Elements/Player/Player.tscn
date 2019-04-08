@@ -31,6 +31,7 @@ emission_shape = 2
 emission_box_extents = Vector3( 10, 20, 1 )
 flag_disable_z = true
 gravity = Vector3( 0, 0, 0 )
+angular_velocity = 1.5134e-43
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 angle_random = 1.0
@@ -48,8 +49,9 @@ scale = Vector2( 0.5, 0.5 )
 texture = ExtResource( 2 )
 
 [node name="Light2D" type="Light2D" parent="Sprite"]
+visible = false
 show_behind_parent = true
-scale = Vector2( 0.556156, 0.595023 )
+scale = Vector2( 1.79355, 1.9688 )
 texture = ExtResource( 3 )
 texture_scale = 0.8
 shadow_enabled = true
@@ -66,17 +68,17 @@ rotation = 1.5708
 scale = Vector2( 3, 2 )
 
 [node name="Shield2" parent="." instance=ExtResource( 4 )]
-position = Vector2( 61.0771, 75.0997 )
+position = Vector2( 64.1292, 73.3905 )
 rotation = 2.35619
 scale = Vector2( 3, 2 )
 
 [node name="Shield3" parent="." instance=ExtResource( 4 )]
-position = Vector2( 60.9699, -74.693 )
+position = Vector2( 64.1954, -73.2023 )
 rotation = 0.785398
 scale = Vector2( 3, 2 )
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
-polygon = PoolVector2Array( -55.4306, -28.4699, 16.4363, -46.2913, 60.0214, -0.575402, 15.9053, 44.7731, -55.6126, 27.4044 )
+polygon = PoolVector2Array( -56.83, -30.2003, 16.3698, -49.1952, 63.6253, -1.47632, 18.6862, 48.559, -57.2933, 28.6375 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true

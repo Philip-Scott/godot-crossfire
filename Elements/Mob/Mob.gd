@@ -1,71 +1,50 @@
 extends RigidBody2D
 
-var Bullet =  preload("res://Elements/Bullet/Bullet.tscn")
-
 signal place_bullet(position, direction)
 
-export (int) var detect_radius  = 420
-export (float) var fire_rate_min = 1.0
-export (float) var fire_rate_max = 4.0
+export (int) var detect_radius  = 1000
+export (int) var fire_radius  = 500
 export (bool) var debug = false
 
-var vis_color = Color(.87, .91, .247, 0.05)
 var laser_color = Color(.87, .0, .0, 0.1)
 var target
-var hit_pos
 
 func _ready():
-	var visibility = CircleShape2D.new()
-	visibility.radius = detect_radius;
-	$Visibility/CollisionShape2D.shape = visibility
-	$ShootingTimer.wait_time = rand_range(fire_rate_min, fire_rate_max)
+	$Visibility.detect_radius = detect_radius
+	$ShootingArea.detect_radius = fire_radius
+
 	if debug:
 		$Light2D.visible = false
 
-func _draw():
-	if debug:
-		draw_circle(Vector2(), detect_radius,  vis_color)
-		if hit_pos and target:
-			draw_circle((hit_pos - position).rotated(-rotation), 5, laser_color)
-			draw_line(Vector2(), (hit_pos - position).rotated(-rotation), laser_color, 5)
+func _physics_process(delta):
+	$States.run(delta)
 
-func _on_ShootingTimer_timeout():
-	var space_state = get_world_2d().direct_space_state
-	var result = space_state.intersect_ray(position, target.position, [self], collision_mask)
+var destryoing = false
+func bullet_hit():
+	if destryoing: return
+	destryoing = true
 
-	if result:
-		hit_pos = result.position
-		if result.collider.name == "Player":
-			rotation = (target.position - position).angle()
-			var bullet_pos = Vector2()
+	$States.set_state("idle")
+	$DestroyParticles.emitting = true
+	$CollisionShape2D.disabled = true
+	$Light2D.enabled = false
+	$Sprite.visible = false
+	$Visibility.queue_free()
+	$DespawnTimer.start()
 
-			bullet_pos.x = 60
-			bullet_pos = bullet_pos.rotated (rotation)
-			bullet_pos += position
+func _on_DespawnTimer_timeout():
+	queue_free()
 
-			var bullet = Bullet.instance()
-			bullet.position = bullet_pos
-
-			var speed = Vector2()
-			speed.x = 400
-			speed = speed.rotated(rotation)
-
-			bullet.apply_impulse (Vector2(), speed);
-
-			get_parent().add_child(bullet)
-
-	update()
-func _on_Visibility_body_entered(body):
+func _on_Visibility_in_area(body):
 	target = body
-	$Sprite.self_modulate.r = 1.0
-	$ShootingTimer.start()
+	$States.set_state("moving-to-player")
 
-func _on_Visibility_body_exited(body):
-	target = null
-	$Sprite.self_modulate.r = 0.0
-	$ShootingTimer.stop()
+func _on_Visibility_out_of_area(target):
+	$States.set_state("idle")
 
+func _on_ShootingArea_in_area(body):
+	target = body
+	$States.set_state("shoot-player");
 
-func _on_Mob_body_shape_entered(body_id, body, body_shape, local_shape):
-	print_debug(body_id)
-	pass # Replace with function body.
+func _on_ShootingArea_out_of_area(target):
+	$States.set_state("moving-to-player")
